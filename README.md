@@ -25,20 +25,28 @@ Performance Benchmarks (vs. zlib)
 Benchmarks were run on an M1 Mac. The 1GB test shows the massive, scalable advantage of warphybrid.
 
 1GB Compressible Data (e.g., JSON, Text, Logs)
-Compressor	Compression	Decompression	Ratio
-zlib	4.109 s	0.283 s	0.10%
-warphybrid	0.020 s	0.068 s	0.39%
-Speed-Up	200x Faster	4.1x Faster	
+_________________________________________________
+Compressor	|Compression	|Decompression	|Ratio
+_________________________________________________
+zlib	      |4.109 s	    |0.283 s	      |0.10%
+_________________________________________________
+warphybrid	|0.020 s	    |0.068 s	      |0.39%
+_________________________________________________
+Speed-Up	  |200x Faster	|4.1x Faster	  |
+_________________________________________________
 
-Export to Sheets
 
 1GB Incompressible Data (e.g., Random, Encrypted, Videos)
-Compressor	Compression	Decompression	Ratio
-zlib	19.576 s	0.210 s	100.03%
-warphybrid	0.227 s	0.093 s	100.00%
-Speed-Up	86x Faster	2.2x Faster	
+__________________________________________________
+Compressor	|Compression	|Decompression	|Ratio
+--------------------------------------------------
+zlib	      |19.576 s	    |0.210 s	      |100.03%
+--------------------------------------------------
+warphybrid	|0.227 s	    |0.093 s	      |100.00%
+--------------------------------------------------
+Speed-Up	  |86x Faster	  |2.2x Faster	
+---------------------------------------------------
 
-Export to Sheets
 
 5GB Compressible Data (Stress Test)
 Compressor	Compression	Decompression	Ratio
