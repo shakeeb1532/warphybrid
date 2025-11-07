@@ -1,94 +1,96 @@
 warphybrid: A High-Speed, Multithreaded Compression Library
-warphybrid is a high-performance, multithreaded Python C-extension for compression, built on the LZ4 algorithm. It is designed to be a "drop-in" replacement for zlib in any application where speed is more critical than ratio.
 
-It is consistently 80x-200x faster at compression and 2x-5x faster at decompression than the standard zlib library, while also being more robust by supporting files larger than 4GB.
+warphybrid is a high-performance, multithreaded Python C-extension for compression, built on the LZ4 algorithm. It is designed to be a "drop-in" replacement for zlib in any application where speed is more critical than compression ratio.
 
-The Problem
-Standard zlib (the engine behind gzip) is a single-threaded bottleneck. In modern, high-traffic applications, zlib's CPU-intensive compression and slow decompression add significant latency to API calls, cache reads, and logging pipelines.
+It offers blazing-fast performance — up to 200x faster at compression and up to 5x faster at decompression than zlib — while also supporting files larger than 4GB.
 
-The warphybrid Solution
-warphybrid is built for speed and scales with modern multi-core CPUs.
+Table of Contents
 
-Fast Core: Uses the LZ4 algorithm, famous for its "at-speed" compression and blazing-fast decompression.
+Introduction
 
-Fully Multithreaded: Uses OpenMP to parallelize both compression and decompression over all available CPU cores.
+Features
 
-Intelligent Block Design: Data is split into 1MB blocks, which provides the optimal balance of ratio and parallelism.
+Performance Benchmarks
 
-Robust & Smart:
+Installation
 
->4GB Support: Natively handles massive files. Our 5GB test completed successfully while zlib failed.
+Prerequisites
 
-Incompressible Data Bypass: Intelligently detects pre-compressed (e.g., PDF, JPG) or random data and stores it raw, turning a slow decompression into an ultra-fast memcpy.
+Build Instructions
 
-Performance Benchmarks (vs. zlib)
-Benchmarks were run on an M1 Mac. The 1GB test shows the massive, scalable advantage of warphybrid.
+Usage
 
-1GB Compressible Data (e.g., JSON, Text, Logs)
-_________________________________________________
-Compressor	|Compression	|Decompression	|Ratio
-_________________________________________________
-zlib	      |4.109 s	    |0.283 s	      |0.10%
-_________________________________________________
-warphybrid	|0.020 s	    |0.068 s	      |0.39%
-_________________________________________________
-Speed-Up	  |200x Faster	|4.1x Faster	  |
-_________________________________________________
+Benchmarking
 
+Dependencies
 
-1GB Incompressible Data (e.g., Random, Encrypted, Videos)
-__________________________________________________
-Compressor	|Compression	|Decompression	|Ratio
---------------------------------------------------
-zlib	      |19.576 s	    |0.210 s	      |100.03%
---------------------------------------------------
-warphybrid	|0.227 s	    |0.093 s	      |100.00%
---------------------------------------------------
-Speed-Up	  |86x Faster	  |2.2x Faster	
----------------------------------------------------
+Troubleshooting
 
+License
 
-5GB Compressible Data (Stress Test)
+Introduction
+
+Standard zlib (the engine behind gzip) is a single-threaded bottleneck. In modern, high-traffic applications, its CPU-intensive compression and slow decompression can significantly increase latency in API calls, cache reads, and logging systems.
+
+warphybrid solves this by using the LZ4 algorithm and fully utilizing modern multi-core CPUs for both compression and decompression.
+
+Features
+
+⚡ LZ4-Powered Core: High-speed compression/decompression.
+
+🧵 Multithreaded: Uses OpenMP to parallelize operations across all CPU cores.
+
+🧠 Intelligent Block Design: Uses 1MB blocks to balance speed and ratio.
+
+📦 >4GB File Support: Natively handles massive files.
+
+🚀 Incompressible Data Detection: Skips unnecessary compression for pre-compressed or random data, turning slow decompression into a simple memcpy.
+
+Performance Benchmarks
+
+System: M1 Mac
+Data Size: 1GB and 5GB
+Benchmark Script: test_warp_hybrid.py
+
+📄 1GB Compressible Data (JSON, Text, Logs)
+Compressor	Compression	Decompression	Ratio	Speed-Up
+zlib	4.109 s	0.283 s	0.10%	—
+warphybrid	0.020 s	0.068 s	0.39%	200x / 4.1x
+🗃 1GB Incompressible Data (Random, Encrypted, Video)
+Compressor	Compression	Decompression	Ratio	Speed-Up
+zlib	19.576 s	0.210 s	100.03%	—
+warphybrid	0.227 s	0.093 s	100.00%	86x / 2.2x
+🧪 5GB Compressible Data (Stress Test)
 Compressor	Compression	Decompression	Ratio
-zlib	FAILED	FAILED	N/A
+zlib	❌ FAILED	❌ FAILED	N/A
 warphybrid	0.152 s	0.619 s	0.39%
+Installation
+Prerequisites
 
-Export to Sheets
+Python 3.x
 
-Build & Installation
-This project is a Python C-extension and must be compiled.
+C compiler with OpenMP support
 
-1. Prerequisites
-You need a C compiler and the lz4 and OpenMP libraries.
+lz4 and libomp libraries
 
-macOS (Apple Silicon / Intel):
-
-Bash
-
-# Install Homebrew
+macOS (Apple Silicon / Intel)
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Install dependencies
 brew install lz4 libomp
-Linux (Debian/Ubuntu):
 
-Bash
-
+Linux (Debian/Ubuntu)
 sudo apt-get update
 sudo apt-get install -y build-essential python3-dev liblz4-dev libomp-dev
-Windows:
 
-Install the "C++ build tools" from the Visual Studio Build Tools.
+Windows
 
-Install lz4 via vcpkg.
+Install Visual Studio Build Tools with C++ support.
 
-The setup.py is configured to use the MSVC compiler's /openmp flag.
+Install lz4 via vcpkg
+.
 
-2. Compile the Module
-Once dependencies are installed, you can build the module from the project root.
+Ensure /openmp is enabled in the compiler options (set in setup.py).
 
-Bash
-
+Build Instructions
 # Create and activate a virtual environment
 python3 -m venv venv
 source venv/bin/activate
@@ -96,42 +98,72 @@ source venv/bin/activate
 # Install build tools
 pip install setuptools
 
-# Build the C-extension
+# Compile the C-extension
 python3 setup.py build_ext --inplace
-If this succeeds, you will have a warphybrid.so (or warphybrid.pyd on Windows) file in your directory.
 
-How to Use
-The module's API is simple and designed to be familiar.
 
-Python
+You should now see warphybrid.so (Linux/macOS) or warphybrid.pyd (Windows) in your directory.
+
+Usage
+
+The API is designed to be minimal and familiar to zlib users.
 
 import warphybrid
-import os
 
-# --- 1. Smart Default Compression ---
-# The compressor will intelligently use a 1MB block size
-# or the file size if it's smaller.
-my_data = b"This is some data to compress" * 1000
-compressed_data = warphybrid.compress_hybrid(my_data)
+data = b"This is some data to compress" * 1000
 
-# --- 2. Manual Override (for tuning) ---
-# You can also specify a block size in bytes.
-KB_100 = 100 * 1024
-compressed_100kb_blocks = warphybrid.compress_hybrid(my_data, KB_100)
+# 1. Smart compression (1MB blocks by default)
+compressed = warphybrid.compress_hybrid(data)
 
-# --- 3. Decompression ---
-# Decompression is multithreaded and automatic.
-decompressed_data = warphybrid.decompress_hybrid(compressed_data)
+# 2. Optional: Manual block size (in bytes)
+compressed_custom = warphybrid.compress_hybrid(data, 100 * 1024)  # 100KB blocks
 
-assert my_data == decompressed_data
+# 3. Decompression
+decompressed = warphybrid.decompress_hybrid(compressed)
+
+assert decompressed == data
 print("Success!")
-Running the Benchmark
-The included test script can be used to run benchmarks and create large test files.
 
-Bash
+Benchmarking
 
-# Create the test files (1GB+ files will take time)
+Run the benchmark script to test performance and create large test files:
+
+# Generate test files (1GB+)
 python3 test_warp_hybrid.py --create-files
 
-# Run the full benchmark suite
+# Run benchmarks
 python3 test_warp_hybrid.py
+
+Dependencies
+
+LZ4 – High-speed compression algorithm (lz4.github.io/lz4
+)
+
+OpenMP – For multithreading
+
+Python C API – For building native extensions
+
+Troubleshooting
+
+❗ Missing OpenMP or lz4: Make sure libomp and lz4 are installed correctly.
+
+🪟 Windows build issues: Ensure you're using MSVC with /openmp, and dependencies are available via vcpkg.
+
+🐍 Python Version Errors: Confirm you're using a compatible Python version (3.x).
+
+License
+
+MIT License. See LICENSE
+ for details.
+
+Let me know if you want to:
+
+Add author/contributor credits
+
+Include a CHANGELOG.md or versioning section
+
+Package it for PyPI (setup.py, pyproject.toml)
+
+Add badges (build status, license, PyPI version)
+
+I'm happy to help with any of those next.
